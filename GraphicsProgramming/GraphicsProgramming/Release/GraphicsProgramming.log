@@ -1,0 +1,10 @@
+﻿  Input.cpp
+  Main.cpp
+  Scene.cpp
+  Vector3.cpp
+  Generating code
+  28 of 30 functions (93.3%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  GraphicsProgramming.vcxproj -> \\vmwfil01\HomeDrives67$\p514846\Teaching\2018-19\CMP203 Graphics Programming\Framework\GraphicsProgrammingTest\Release\GraphicsProgramming.exe

@@ -1,0 +1,18 @@
+http://seamless-pixels.blogspot.com/2012/09/free-seamless-marble-textures.html
+"Smooth white marble"
+
+https://www.desirefx.me/tyrion-lannister-3d-model/
+"Tyrion Lannister 3D Model"
+
+
+https://kabosu112.exblog.jp/9944144/
+"doge"
+
+http://www.cadnav.com/3d-models/model-42774.html
+"snek"
+
+
+Note:
+Had to remove model elements from Tyrion Lannister 3D Model using blender
+Had to edit doge texture to blur out background elements using gimp
+Had to edit snek texture to make it look gold.
