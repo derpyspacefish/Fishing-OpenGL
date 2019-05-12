@@ -18,6 +18,9 @@ These defines were used to create the rubix cube in the labs. They are now used 
 // You should add further variables to need initilised.
 Scene::Scene(Input *in)
 {
+	worldSkybox = new worldSkyBox;
+
+
 	toggle = new Toggle;
 	// Store pointer for input class
 	input = in;
@@ -40,8 +43,8 @@ Scene::Scene(Input *in)
 
 	// Initialise scene variables
 	{
-		boxTexSize = 1024.f;
-		boxSideTexSize = 256.f;
+		//boxTexSize = 1024.f;
+		//boxSideTexSize = 256.f;
 		noRotate = true;
 		wireToggle = false;
 		rotSpeed = 5.f;
@@ -442,6 +445,7 @@ void Scene::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	skyBox();
+	worldSkybox->skyBoxRun(1,1,1,toggle,cameraLord,cameraIndex,rotation);
 
 
 	// LIGHTBALL CODE --------------------------------------

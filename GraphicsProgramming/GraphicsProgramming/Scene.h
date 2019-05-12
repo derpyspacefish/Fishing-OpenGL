@@ -23,6 +23,7 @@
 #include "Prop.h"
 #include "CameraLord.h"
 #include "Toggle.h"
+#include "Skybox.h"
 
 class Scene {
 
@@ -38,6 +39,8 @@ public:
 	void resize(int w, int h);
 
 protected:
+	worldSkyBox* worldSkybox;
+
 	void skyBox(int x, int y, int z);
 	// Renders text (x, y positions, RGB colour of text, string of text to be rendered)
 	void displayText(float x, float y, float r, float g, float b, char* string);
