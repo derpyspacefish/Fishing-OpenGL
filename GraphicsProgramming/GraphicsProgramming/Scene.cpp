@@ -37,8 +37,6 @@ Scene::Scene(Input *in)
 														// Other OpenGL / render setting should be applied here.
 
 	model[0].load("models/shibainu.obj", "gfx/shibatexture.png"); //dog
-	model[1].load("models/Tyrion Lannister 3D Model.obj", "gfx/Smooth white marble.jpg"); //statue
-	model[2].load("models/snek.obj", "gfx/snek.png"); // golden snake
 
 	// Initialise scene variables
 	{
@@ -59,13 +57,6 @@ Scene::Scene(Input *in)
 
 	//load textures
 	{
-		beamTexture = SOIL_load_OGL_texture
-		(
-			"gfx/lightRay.png",
-			SOIL_LOAD_AUTO,
-			SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-		);
 		skyboxTexture = SOIL_load_OGL_texture
 		(
 			"gfx/skybox.png",
@@ -85,14 +76,6 @@ Scene::Scene(Input *in)
 		dogeTexture = SOIL_load_OGL_texture
 		(
 			"gfx/doge.png",
-			SOIL_LOAD_AUTO,
-			SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-		);
-
-		idolFaceTexture = SOIL_load_OGL_texture
-		(
-			"gfx/idol.png",
 			SOIL_LOAD_AUTO,
 			SOIL_CREATE_NEW_ID,
 			SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
@@ -121,27 +104,34 @@ Scene::Scene(Input *in)
 		prop.getSpotlight(1)->setTexture(beamTexture, dogeTexture);
 		prop.newLightBall(GL_LIGHT0);
 		vector<float> holeyCoords;
-		for (int holeY = 0; holeY < 5; holeY++)
-		{
-			for (int holeX = 0; holeX < 17; holeX++)
-			{
-				holeyCoords.push_back(holeX * 5 + 0.f + holeX);
-				holeyCoords.push_back(holeY * 5 + 5.f + holeY);
-				holeyCoords.push_back(holeX * 5 + 5.f + holeX);
-				holeyCoords.push_back(holeY * 5 + 10.f + holeY);
-			}
-		}
+		//for (int holeY = 0; holeY < 5; holeY++)
+		//{
+		//	for (int holeX = 0; holeX < 17; holeX++)
+		//	{
+		//		holeyCoords.push_back(holeX * 5 + 0.f + holeX);
+		//		holeyCoords.push_back(holeY * 5 + 5.f + holeY);
+		//		holeyCoords.push_back(holeX * 5 + 5.f + holeX);
+		//		holeyCoords.push_back(holeY * 5 + 10.f + holeY);
+		//	}
+		//}
 
 
-		holeyCoords.push_back(20.f);
-		holeyCoords.push_back(100.f);
-		holeyCoords.push_back(40.f);
-		holeyCoords.push_back(110.f);
+		//holeyCoords.push_back(20.f);
+		//holeyCoords.push_back(100.f);
+		//holeyCoords.push_back(40.f);
+		//holeyCoords.push_back(110.f);
 
-		prop.newPlane(holeyCoords, 5, 10, 50, 660.f/1024.f, 330.f/1024.f, 100.f / 1024.f, 1.f - 330.f / 1024.f); //element 0
+		//prop.newPlane(holeyCoords, 5, 10, 50, 660.f/1024.f, 330.f/1024.f, 100.f / 1024.f, 1.f - 330.f / 1024.f); //element 0
+		//prop.newPlane(1, 20, 20); // element 1
+		//prop.newPlane(1, 20, 20); // element 2
+		//prop.newPlane(5, 100, 100); // element 3
+		//prop.getPlane(0)->setTexture(dogeTexture);
+		//prop.getPlane(2)->setTexture(dogeTexture);
+		//prop.getPlane(3)->setTexture(dogeTexture);
+		prop.newPlane(1, 1, 1); //element 0
 		prop.newPlane(1, 20, 20); // element 1
 		prop.newPlane(1, 20, 20); // element 2
-		prop.newPlane(5, 100, 100); // element 3
+		prop.newPlane(1, 1, 1); // element 3
 		prop.getPlane(0)->setTexture(dogeTexture);
 		prop.getPlane(2)->setTexture(dogeTexture);
 		prop.getPlane(3)->setTexture(dogeTexture);
@@ -481,28 +471,6 @@ void Scene::render() {
 	//glEnable(GL_DEPTH_TEST);								//depth-0
 	glStencilFunc(GL_EQUAL, 1, 1);							//func-0
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);					//op-0
-	glPushMatrix();
-	{
-		glScalef(1.0f, -1.0f, 1.0f);
-		glPushMatrix();
-		skyBox(1, -1, 1);
-		glPopMatrix();
-		//move below floor
-		glTranslatef(5, 0.5, -5);
-		prop.getSpotlight(0)->renderFake(6.f, 0.f, 0.f);
-		prop.getSpotlight(1)->renderFake(-6.f, 0.f, 0.f);
-		//flip vertically
-		//give rotation
-		glPushMatrix();
-		{
-			glRotatef(rotation, 0, 1, 0);
-
-			//glScalef(0.06, 0.06, 0.06);
-			model[1].render();
-		}
-		glPopMatrix();
-	}
-	glPopMatrix();
 	glDisable(GL_STENCIL_TEST);								//stencil-0
 
 	toggle->toggleLit();
@@ -552,17 +520,6 @@ void Scene::render() {
 
 
 
-	glPushMatrix();
-	{
-		glTranslatef(-6.f / 2, -10.f / 2, -35.f);
-		glPushMatrix();
-		{
-			glScalef(0.5f, 0.5f, 0.5f);
-			model[2].render();
-		}
-		glPopMatrix();
-	}
-	glPopMatrix();
 
 	//corridor
 	for (int i = 0; i < 4; i++)
@@ -700,22 +657,6 @@ void Scene::render() {
 	}
 	glPopMatrix();
 	glClear(GL_STENCIL_BUFFER_BIT);
-	glPushMatrix();
-	{
-		glTranslatef(5, 0.5, -5);
-		glPushMatrix();
-		{
-			glRotatef(rotation, 0, 1, 0);
-
-			//glScalef(0.06, 0.06, 0.06);
-			model[1].render();
-		}
-		glPopMatrix();
-		//render spotlights after everything so transparent elements can blend with everything
-		prop.getSpotlight(0)->render(6.f, 0.f, 0.f);
-		prop.getSpotlight(1)->render(-6.f, 0.f, 0.f);
-	}
-	glPopMatrix();
 
 
 	// End render geometry --------------------------------------

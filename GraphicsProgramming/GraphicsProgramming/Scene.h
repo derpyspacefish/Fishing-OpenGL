@@ -52,7 +52,7 @@ protected:
 	Input* input;
 
 	// For access to model loader.
-	Model model[3];
+	Model model[1];
 
 	// For Window and frustum calculation.
 	int width, height;
