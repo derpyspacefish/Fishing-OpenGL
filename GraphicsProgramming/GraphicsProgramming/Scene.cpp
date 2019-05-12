@@ -98,7 +98,7 @@ Scene::Scene(Input *in)
 		cameraLord.getCamera(1)->Roll = 0;
 
 		//props and articulated planes
-		prop.newLightBall(GL_LIGHT0, LB_x, LB_y, LB_z, forward);
+		prop.newLightBall(GL_LIGHT0, *cameraLord.getCamera(1));
 		vector<float> holeyCoords;
 		//for (int holeY = 0; holeY < 5; holeY++)
 		//{
@@ -446,11 +446,6 @@ void Scene::render() {
 
 	// LIGHTBALL CODE --------------------------------------
 	// only thing keeping this from being done in update() is that the shadow code uses "Light_Position[]"
-
-	LB_x = cameraLord.getCamera(1)->getPosX();
-	LB_y = cameraLord.getCamera(1)->getPosY();
-	LB_z = cameraLord.getCamera(1)->getPosZ();
-	forward = cameraLord.getCamera(1)->getForward();
 	prop.render();
 
 	GLfloat floorVerts[] =
@@ -460,7 +455,7 @@ void Scene::render() {
 		0.f,	2.f,	 0.f,	//bottom right
 		0.f,	2.f,	 -10.f	// top right
 	};
-	GLfloat Light_Position[] = { LB_x, LB_y, LB_z, 1 };
+	GLfloat Light_Position[] = { prop.getLightBall(0)->x_, prop.getLightBall(0)->y_, prop.getLightBall(0)->z_, 1 };
 
 	// SHADOW CODE --------------------------------------
 	{

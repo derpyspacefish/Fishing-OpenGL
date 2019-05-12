@@ -16,9 +16,9 @@ Prop::~Prop()
 	}
 }
 
-void Prop::newLightBall(int _light, GLfloat &x, GLfloat &y, GLfloat &z, Vector3 &forward)
+void Prop::newLightBall(int _light, Camera& camera)
 {
-	LightBall* lightBall = new LightBall(_light, x, y, z, forward);
+	LightBall* lightBall = new LightBall(_light, camera);
 	lightBalls.push_back(lightBall);
 	return;
 }
