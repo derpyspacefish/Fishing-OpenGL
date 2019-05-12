@@ -98,10 +98,6 @@ Scene::Scene(Input *in)
 		cameraLord.getCamera(1)->Roll = 0;
 
 		//props and articulated planes
-		prop.newSpotlight(GL_LIGHT1, toggle);
-		prop.newSpotlight(GL_LIGHT2, toggle);
-		prop.getSpotlight(0)->setTexture(beamTexture, dogeTexture);
-		prop.getSpotlight(1)->setTexture(beamTexture, dogeTexture);
 		prop.newLightBall(GL_LIGHT0);
 		vector<float> holeyCoords;
 		//for (int holeY = 0; holeY < 5; holeY++)
@@ -256,8 +252,6 @@ void Scene::update(float dt)
 		rotation = rotation + rotSpeed * dt;
 	}
 	cameraLord.update(dt, deltaMouseX, deltaMouseY, cameraIndex);
-	prop.getSpotlight(0)->update(dt);
-	prop.getSpotlight(1)->update(dt);
 	prop.getLightBall(0)->update(dt);
 }
 /*renders at camera position
@@ -437,9 +431,9 @@ void Scene::render() {
 	gluLookAt(cameraLord.getCamera(cameraIndex)->getPosX(), cameraLord.getCamera(cameraIndex)->getPosY(), cameraLord.getCamera(cameraIndex)->getPosZ(), cameraLord.getCamera(cameraIndex)->getLookX(), cameraLord.getCamera(cameraIndex)->getLookY(), cameraLord.getCamera(cameraIndex)->getLookZ(), cameraLord.getCamera(cameraIndex)->getUpX(), cameraLord.getCamera(cameraIndex)->getUpY(), cameraLord.getCamera(cameraIndex)->getUpZ());
 
 	ArticulatedPlane* floor = prop.getPlane(0);
-	ArticulatedPlane* dogeStencil = prop.getPlane(1);
-	ArticulatedPlane* doge = prop.getPlane(2);
-	ArticulatedPlane* ceiling = prop.getPlane(3);
+	//ArticulatedPlane* dogeStencil = prop.getPlane(1);
+	//ArticulatedPlane* doge = prop.getPlane(2);
+	//ArticulatedPlane* ceiling = prop.getPlane(3);
 
 	// Render geometry/scene here -------------------------------------
 
@@ -449,105 +443,15 @@ void Scene::render() {
 
 	skyBox();
 
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);		//mask-0
-	glStencilFunc(GL_ALWAYS, 1, 1);								//func-0
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);					//op-0
-	toggle->toggleDepth();
-	//glDisable(GL_DEPTH_TEST);									//depth-0
-	glEnable(GL_STENCIL_TEST);									//stencil-0
 
-		//draw floor
-	glPushMatrix();
-	{
-		glTranslatef(-1, 0, 1.f);
-		//glBindTexture(GL_TEXTURE_2D, dogeTexture);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		dogeStencil->render();
-	}
-	glPopMatrix();
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);		//mask-0
-	toggle->toggleDepth();
-	//glEnable(GL_DEPTH_TEST);								//depth-0
-	glStencilFunc(GL_EQUAL, 1, 1);							//func-0
-	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);					//op-0
-	glDisable(GL_STENCIL_TEST);								//stencil-0
-
-	toggle->toggleLit();
-	//glDisable(GL_LIGHTING);									//lighting-0
-	toggle->toggleBlend();
-	//glEnable(GL_BLEND);										//blend-0
-	glColor4f(0.8f, 0.8f, 0.8f, 0.8f);
-
-
-	glPushMatrix();
-	glTranslatef(-1, 0, 1.f);
-	glBindTexture(GL_TEXTURE_2D, dogeTexture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	doge->render();
-	glPopMatrix();
-
-
-	toggle->toggleLit();
-	//glEnable(GL_LIGHTING);									//lighting-0
-	toggle->toggleBlend();
-	//glDisable(GL_BLEND);									//blend-0
-	glClear(GL_STENCIL_BUFFER_BIT);
-
-	glPushMatrix();
-	{
-		glTranslatef(0, 10, 0.f);
-		glPushMatrix();
-		{
-			glRotatef(180, 1, 0, 0);
-			glTranslatef(-50, 0, 50.f);
-			ceiling->render();
-		}
-		glPopMatrix();
-	}
-	glPopMatrix();
-
-
-
+	// LIGHTBALL CODE --------------------------------------
+	// only thing keeping this from being done in update() is that the shadow code uses "Light_Position[]"
 
 	GLfloat lX, lY, lZ;
 	lX = cameraLord.getCamera(1)->getPosX();
 	lY = cameraLord.getCamera(1)->getPosY();
 	lZ = cameraLord.getCamera(1)->getPosZ();
 	prop.getLightBall(0)->render(lX, lY, lZ, cameraLord.getCamera(1)->getForward());
-	GLfloat Light_Position[] = { lX, lY, lZ, 1 };
-
-
-
-
-	//corridor
-	for (int i = 0; i < 4; i++)
-	{
-		glPushMatrix();
-		{
-			glRotatef(90 * i, 0, 0, 1);
-			glPushMatrix();
-			{
-				glTranslatef(-10.f / 2, -10.f / 2, -30.f);
-				//statuette(0.f, 0.f, 5.f);
-				glBindTexture(GL_TEXTURE_2D, dogeTexture);
-				glTexParameteri(GL_TEXTURE_2D, 8, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, 8, GL_REPEAT);
-				floor->render();
-			}
-			glPopMatrix();
-		}
-		glPopMatrix();
-	}
-
-
-
-
-
-
-
-
 
 	GLfloat floorVerts[] =
 	{
@@ -556,107 +460,106 @@ void Scene::render() {
 		0.f,	2.f,	 0.f,	//bottom right
 		0.f,	2.f,	 -10.f	// top right
 	};
-	//Light_Position
+	GLfloat Light_Position[] = { lX, lY, lZ, 1 };
 
-	//for (int i = 0; i < 4; i++) {
-	//	Light_Position[i] *= -1;
-	//}
-
-
-	shadowMan.generateShadowMatrix(shadowMatrix, Light_Position, floorVerts);
-
-	glDisable(GL_TEXTURE_2D);
-	//floor
-	glPushMatrix();
+	// SHADOW CODE --------------------------------------
 	{
-		glTranslatef(-5, 2, 5);
-		glBegin(GL_QUADS);
-		glNormal3f(0.f, 1.f, 0.f);
-		glVertex3f(10.f, 0.f, -10.f);
-		glNormal3f(0.f, 1.f, 0.f);
-		glVertex3f(10.f, 0.f, 0.f);
-		glNormal3f(0.f, 1.f, 0.f);
-		glVertex3f(0.f, 0.f, 0.f);
-		glNormal3f(0.f, 1.f, 0.f);
-		glVertex3f(0.f, 0.f, -10.f);
-		glEnd();
-	}
-	glPopMatrix();
+		shadowMan.generateShadowMatrix(shadowMatrix, Light_Position, floorVerts);
 
-
-
-	//glDisable(GL_LIGHTING);										//lighting-1
-	toggle->toggleLit();
-
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);		//mask-1
-	glStencilFunc(GL_ALWAYS, 1, 1);								//func-1
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);					//op-1
-	glEnable(GL_STENCIL_TEST);									//stencil-1
-	//draw stencil
-	glPushMatrix();
-	{
-		glTranslatef(-5, 2, 5);
-		glBegin(GL_QUADS);
-		glVertex3f(10.f, 0.f, -10.f);
-		glVertex3f(10.f, 0.f, 0.f);
-		glVertex3f(0.f, 0.f, 0.f);
-		glVertex3f(0.f, 0.f, -10.f);
-		glEnd();
-	}
-	glPopMatrix();
-
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);			//mask-1
-	glStencilFunc(GL_EQUAL, 1, 1);								//func-1
-	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);						//op-1
-
-
-	glPushMatrix();
-	{
-		//glDisable(GL_TEXTURE_2D);
-		glEnable(GL_BLEND);										//blend-1
-		//glEnable(GL_CULL_FACE);									//cull-0
-		//glCullFace(GL_BACK);
-		glColor4f(0.1f, 0.1f, 0.1f, 0.2f); // Shadow's colour
-		toggle->toggleDepth();
-		//glDisable(GL_DEPTH_TEST);									//depth-1
+		glDisable(GL_TEXTURE_2D);
+		//visible floor
 		glPushMatrix();
 		{
-
-			glTranslatef(0, 0.01f, 0);
-			glMultMatrixf((GLfloat *)shadowMatrix);
-			//translate to floor and draw shadow, remember to match any transforms on thessssssssa wwWWw
-			glTranslatef(0, 2, 0);
-			//glRotatef(rotation, 0.f, 1.f, 0.f);
-			glScalef(0.2f, 0.2f, 0.2f);
-			model[0].render();
-			glColor4f(1.0f, 1.0f, 1.0f, 1.f);
+			glTranslatef(-5, 2, 5);
+			glBegin(GL_QUADS);
+			glNormal3f(0.f, 1.f, 0.f);
+			glVertex3f(10.f, 0.f, -10.f);
+			glNormal3f(0.f, 1.f, 0.f);
+			glVertex3f(10.f, 0.f, 0.f);
+			glNormal3f(0.f, 1.f, 0.f);
+			glVertex3f(0.f, 0.f, 0.f);
+			glNormal3f(0.f, 1.f, 0.f);
+			glVertex3f(0.f, 0.f, -10.f);
+			glEnd();
 		}
-		toggle->toggleDepth();
-		//glEnable(GL_DEPTH_TEST);									//depth-1
 		glPopMatrix();
-		//glDisable(GL_CULL_FACE);									//cull-0
-		glDisable(GL_BLEND);										//blend-1
 
 
-		glDisable(GL_STENCIL_TEST);									//stencil-1
-		glEnable(GL_TEXTURE_2D);
+
+		//glDisable(GL_LIGHTING);										//lighting-1
 		toggle->toggleLit();
-		//glEnable(GL_LIGHTING);										//lighting-1
 
+		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);		//mask-1
+		glStencilFunc(GL_ALWAYS, 1, 1);								//func-1
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);					//op-1
+		glEnable(GL_STENCIL_TEST);									//stencil-1
+		//draw stencil
+		glPushMatrix();
+		{
+			glTranslatef(-5, 2, 5);
+			glBegin(GL_QUADS);
+			glVertex3f(10.f, 0.f, -10.f);
+			glVertex3f(10.f, 0.f, 0.f);
+			glVertex3f(0.f, 0.f, 0.f);
+			glVertex3f(0.f, 0.f, -10.f);
+			glEnd();
+		}
+		glPopMatrix();
 
-		glColor3f(1.0f, 1.0f, 1.0f); // S
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);			//mask-1
+		glStencilFunc(GL_EQUAL, 1, 1);								//func-1
+		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);						//op-1
+
 
 		glPushMatrix();
 		{
-			glTranslatef(0, 2, 0);
-			//glRotatef(rotation, 0.f, 1.f, 0.f);
-			glScalef(0.2f, 0.2f, 0.2f);
-			model[0].render();
+			//glDisable(GL_TEXTURE_2D);
+			glEnable(GL_BLEND);										//blend-1
+			//glEnable(GL_CULL_FACE);									//cull-0
+			//glCullFace(GL_BACK);
+			glColor4f(0.1f, 0.1f, 0.1f, 0.2f); // Shadow's colour
+			toggle->toggleDepth();
+			//glDisable(GL_DEPTH_TEST);									//depth-1
+			glPushMatrix();
+			{
+
+				glTranslatef(0, 0.01f, 0);
+				glMultMatrixf((GLfloat *)shadowMatrix);
+				//translate to floor and draw shadow, remember to match any transforms on thessssssssa wwWWw
+				glTranslatef(0, 2, 0);
+				//glRotatef(rotation, 0.f, 1.f, 0.f);
+				glScalef(0.2f, 0.2f, 0.2f);
+				model[0].render();
+				glColor4f(1.0f, 1.0f, 1.0f, 1.f);
+			}
+			toggle->toggleDepth();
+			//glEnable(GL_DEPTH_TEST);									//depth-1
+			glPopMatrix();
+			//glDisable(GL_CULL_FACE);									//cull-0
+			glDisable(GL_BLEND);										//blend-1
+
+
+			glDisable(GL_STENCIL_TEST);									//stencil-1
+			glEnable(GL_TEXTURE_2D);
+			toggle->toggleLit();
+			//glEnable(GL_LIGHTING);										//lighting-1
+
+
+			glColor3f(1.0f, 1.0f, 1.0f); // S
+
+			glPushMatrix();
+			{
+				glTranslatef(0, 2, 0);
+				//glRotatef(rotation, 0.f, 1.f, 0.f);
+				glScalef(0.2f, 0.2f, 0.2f);
+				model[0].render();
+			}
+			glPopMatrix();
 		}
 		glPopMatrix();
+		glClear(GL_STENCIL_BUFFER_BIT);
 	}
-	glPopMatrix();
-	glClear(GL_STENCIL_BUFFER_BIT);
+	
 
 
 	// End render geometry --------------------------------------
