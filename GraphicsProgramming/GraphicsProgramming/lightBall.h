@@ -9,15 +9,19 @@ class LightBall
 {
 public:
 	/*Create LightBall, takes specified light (eg GL_LIGHT0) as a parameter*/
-	LightBall(int _light);
+	LightBall(int _light, GLfloat &x, GLfloat &y, GLfloat &z, Vector3 &forward);
 	~LightBall();
 	/*render sphere and point light at coordinates + forward vector. x y and z passed by reference to chnge the Light_Position vector in Scene.cpp*/
-	void render(GLfloat &x, GLfloat &y, GLfloat &z, Vector3 _forward);
+	void render();
 	/*ball movement controls, "[" sets lightBallDistanceDec true and "]" sets lightBallDistanceInc.*/
 	void checkControls(Input* input);
 	/*performs rotatons and movement as outlined in checkControls()*/
 	void update(float deltaTime);
 private:
+	GLfloat *x_;
+	GLfloat *y_; 
+	GLfloat *z_;
+	Vector3 *forward_;
 	int light;
 	bool lightBallDistanceDec;//bool is true when lightBallDistance needs to decrement.
 	bool lightBallDistanceInc;//bool is true when lightBallDistance needs to increment.

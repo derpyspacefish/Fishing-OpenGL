@@ -96,6 +96,10 @@ protected:
 	ArticulatedPlane* articulatePlaneHandler;
 	Prop prop; //collection scene props. Contains articulated planes, spotlights, and lightballs
 	Toggle* toggle; //toggles various openGL settings
+	float LB_x;
+	float LB_y;
+	float LB_z;
+	Vector3 forward;
 
 	Shape shape_handler;
 };

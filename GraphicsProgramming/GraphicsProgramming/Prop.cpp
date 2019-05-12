@@ -16,9 +16,9 @@ Prop::~Prop()
 	}
 }
 
-void Prop::newLightBall(int _light)
+void Prop::newLightBall(int _light, GLfloat &x, GLfloat &y, GLfloat &z, Vector3 &forward)
 {
-	LightBall* lightBall = new LightBall(_light);
+	LightBall* lightBall = new LightBall(_light, x, y, z, forward);
 	lightBalls.push_back(lightBall);
 	return;
 }
@@ -52,6 +52,22 @@ Spotlight * Prop::getSpotlight(int index)
 ArticulatedPlane * Prop::getPlane(int index)
 {
 	return articulatedPlanes.at(index);
+}
+
+void Prop::render()
+{
+	for (auto sl : spotlights)
+	{
+		sl->render();
+	}
+	for (auto lb : lightBalls)
+	{
+		lb->render();
+	}
+	for (auto arty : articulatedPlanes)
+	{
+		arty->render();
+	}
 }
 
 LightBall * Prop::getLightBall(int index)
