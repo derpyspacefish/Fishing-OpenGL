@@ -48,7 +48,7 @@ void Spotlight::update(float deltaTime)
 }
 
 
-void Spotlight::render(float x = 0, float y = 0, float z = 0)
+void Spotlight::render(float x, float y, float z)
 {
 	glPushMatrix();
 	{

@@ -14,7 +14,7 @@ public:
 	/*continue light animation*/
 	void update(float deltaTime);
 	/*Renders spotlight at the origin or the paremeters given (x, y, z)*/
-	void render(float x, float y, float z);
+	void render(float x = 0, float y = 0, float z = 0);
 	/*Renders spotlight (only geometry) at the origin or the paremeters given (x, y, z)*/
 	void renderFake(float x, float y, float z);
 	void setTexture(GLuint _beamTexture, GLuint _texture);
