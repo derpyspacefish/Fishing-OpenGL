@@ -14,7 +14,7 @@ Camera::Camera(float _cameraSpeed)
 	MinYaw = -1;
 	MinRoll = -1;
 
-	setPos(0, 0, 0);
+	//setPos(0, 0, 0);
 }
 
 Camera::~Camera()
