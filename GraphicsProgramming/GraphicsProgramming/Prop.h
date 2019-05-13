@@ -4,6 +4,7 @@
 #include "LightBall.h"
 #include <vector>
 #include "Toggle.h"
+#include "Camera.h"
 
 class Prop
 {
@@ -12,7 +13,7 @@ public:
 	~Prop();
 
 
-	void newLightBall(int _light, GLfloat &x, GLfloat &y, GLfloat &z, Vector3 &forward);
+	void newLightBall(int _light, Camera& camera);
 	void newSpotlight(int _light, Toggle* _toggle);
 	void newPlane(int segments = 1, int width = 1, int length = 1, float texStartX = 0, float texStartY = 0, float texEndX = 1, float texEndY = 1);
 	void newPlane(vector<float> holeyCoordinates, int segments = 1, int width = 1, int length = 1, float texStartX = 0, float texStartY = 0, float texEndX = 1, float texEndY = 1);
