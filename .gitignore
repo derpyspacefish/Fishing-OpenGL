@@ -1,0 +1,13 @@
+
+*.exe
+*.ipch
+*.ipch
+*.opendb
+*.tlog
+GraphicsProgramming/GraphicsProgramming/Debug/lightBall.obj
+GraphicsProgramming/GraphicsProgramming/Debug/Main.obj
+GraphicsProgramming/GraphicsProgramming/Debug/Prop.obj
+GraphicsProgramming/GraphicsProgramming/Debug/Scene.obj
+GraphicsProgramming/GraphicsProgramming/Debug/Camera.obj
+*.pdb
+*.ilk
