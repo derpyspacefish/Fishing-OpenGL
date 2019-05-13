@@ -37,9 +37,12 @@ void renderScene(void)
 	deltaTime = deltaTime / 100.0f;
 
 	// Update Scene and render next frame.
-	scene->handleInput(deltaTime);
-	scene->update(deltaTime);
-	scene->render();
+	if(scene->RunInput)
+		scene->handleInput(deltaTime);
+	if(scene->RunUpdate)
+		scene->update(deltaTime);
+	if(scene->RunRender)
+		scene->render();
 }
 
 // Handles keyboard input events from GLUT.

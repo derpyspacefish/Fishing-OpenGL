@@ -38,6 +38,9 @@ public:
 	// Resizes the OpenGL output based on new window size.
 	void resize(int w, int h);
 
+	bool RunInput = false, RunUpdate, RunRender;
+
+
 protected:
 	worldSkyBox* worldSkybox;
 
