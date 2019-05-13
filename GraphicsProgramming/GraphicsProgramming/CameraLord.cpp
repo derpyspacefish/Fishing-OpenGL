@@ -175,64 +175,69 @@ void CameraLord::newCamera(float _cameraSpeed)
 
 void CameraLord::update(float dt, float _deltaMouseX, float _deltaMouseY, int _cameraIndicator)
 {
-	//camera rotation
-	Camera* it = cameras[_cameraIndicator];
-	if (it->yawDec)
+	if (_deltaMouseX < 100 && _deltaMouseY < 100)
 	{
-		it->Yaw = it->Yaw - it->cameraSpeed * dt * (1 + abs(_deltaMouseX));
-	}
-	if (it->yawInc)
-	{
-		it->Yaw = it->Yaw + it->cameraSpeed * dt * (1 + abs(_deltaMouseX));
-	}
-	if (it->pitchDec)
-	{
-		if(it->Pitch > it->MinPitch)
-			it->Pitch = it->Pitch - it->cameraSpeed * dt * (1 + abs(_deltaMouseY));
-	}
-	if (it->pitchInc)
-	{
-		/*if (it->Pitch > it->MaxPitch * 2  || it->Pitch < it->MinPitch * 2)
-			it->setOrientation(0, 0, 0);*/
+		//camera rotation
+		Camera* it = cameras[_cameraIndicator];
+		if (it->yawDec)
+		{
+			it->Yaw = it->Yaw - it->cameraSpeed * dt * (1 + abs(_deltaMouseX));
+		}
+		if (it->yawInc)
+		{
+			it->Yaw = it->Yaw + it->cameraSpeed * dt * (1 + abs(_deltaMouseX));
+		}
+		if (it->pitchDec)
+		{
+			if (it->Pitch > it->MinPitch)
+				it->Pitch = it->Pitch - it->cameraSpeed * dt * (1 + abs(_deltaMouseY));
+		}
+		if (it->pitchInc)
+		{
+			/*if (it->Pitch > it->MaxPitch * 2  || it->Pitch < it->MinPitch * 2)
+				it->setOrientation(0, 0, 0);*/
 
-		if(it->Pitch < it->MaxPitch)
-			it->Pitch = it->Pitch + it->cameraSpeed * dt * (1 + abs(_deltaMouseY));
-	}
-	if (it->rollDec)
-	{
-		it->Roll = it->Roll + it->cameraSpeed * dt;
-	}
-	if (it->rollInc)
-	{
-		it->Roll = it->Roll - it->cameraSpeed * dt;
-	}
+			if (it->Pitch < it->MaxPitch)
+				it->Pitch = it->Pitch + it->cameraSpeed * dt * (1 + abs(_deltaMouseY));
+		}
 
-	//camera translation
-	if (it->cameraGoingForward)
-	{
-		it->moveForward(+(it->cameraSpeed * dt));
+		if (it->rollDec)
+		{
+			it->Roll = it->Roll + it->cameraSpeed * dt;
+		}
+		if (it->rollInc)
+		{
+			it->Roll = it->Roll - it->cameraSpeed * dt;
+		}
+
+
+		//camera translation
+		if (it->cameraGoingForward)
+		{
+			it->moveForward(+(it->cameraSpeed * dt));
+		}
+		if (it->cameraGoingBack)
+		{
+			it->moveForward(-(it->cameraSpeed * dt));
+		}
+		if (it->cameraGoingRight)
+		{
+			it->moveRight(-(it->cameraSpeed * dt));
+		}
+		if (it->cameraGoingLeft)
+		{
+			it->moveRight(+(it->cameraSpeed * dt));
+		}
+		if (it->cameraGoingUp)
+		{
+			it->moveUp(+(it->cameraSpeed * dt));
+		}
+		if (it->cameraGoingDown)
+		{
+			it->moveUp(-(it->cameraSpeed * dt));
+		}
+		it->update();
 	}
-	if (it->cameraGoingBack)
-	{
-		it->moveForward(-(it->cameraSpeed * dt));
-	}
-	if (it->cameraGoingRight)
-	{
-		it->moveRight(-(it->cameraSpeed * dt));
-	}
-	if (it->cameraGoingLeft)
-	{
-		it->moveRight(+(it->cameraSpeed * dt));
-	}
-	if (it->cameraGoingUp)
-	{
-		it->moveUp(+(it->cameraSpeed * dt));
-	}
-	if (it->cameraGoingDown)
-	{
-		it->moveUp(-(it->cameraSpeed * dt));
-	}
-	it->update();
 }
 
 Camera * CameraLord::getCamera(int index)

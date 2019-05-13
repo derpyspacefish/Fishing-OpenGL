@@ -393,6 +393,7 @@ void Scene::render() {
 
 	// Swap buffers, after all objects are rendered.
 	glutSwapBuffers();
+
 }
 
 // Handles the resize of the window. If the window changes size the perspective matrix requires re-calculation to match new window size.
