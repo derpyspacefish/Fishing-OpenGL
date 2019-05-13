@@ -93,7 +93,7 @@ void CameraLord::checkControls(Input * _input, float _previousMouseX, float _pre
 	{
 		//camera forward
 		{
-			if (_input->isKeyDown('w'))
+			if (_input->isKeyDown('w') || _input->isKeyDown('W'))
 			{
 				getCamera(_camIndicater)->cameraGoingForward = true;
 
@@ -105,7 +105,7 @@ void CameraLord::checkControls(Input * _input, float _previousMouseX, float _pre
 		}
 		//camera back
 		{
-			if (_input->isKeyDown('s'))
+			if (_input->isKeyDown('s') || _input->isKeyDown('S'))
 			{
 				getCamera(_camIndicater)->cameraGoingBack = true;
 
@@ -117,7 +117,7 @@ void CameraLord::checkControls(Input * _input, float _previousMouseX, float _pre
 		}
 		//camera right
 		{
-			if (_input->isKeyDown('d'))
+			if (_input->isKeyDown('d') || _input->isKeyDown('D'))
 			{
 				getCamera(_camIndicater)->cameraGoingRight = true;
 
@@ -129,7 +129,7 @@ void CameraLord::checkControls(Input * _input, float _previousMouseX, float _pre
 		}
 		//camera left
 		{
-			if (_input->isKeyDown('a'))
+			if (_input->isKeyDown('a') || _input->isKeyDown('A'))
 			{
 				getCamera(_camIndicater)->cameraGoingLeft = true;
 

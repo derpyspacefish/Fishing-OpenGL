@@ -22,6 +22,8 @@ Scene::Scene(Input *in)
 	// Store pointer for input class
 	input = in;
 
+	worldBox = new worldSkyBox;
+
 	//OpenGL settings
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	glClearColor(0.39f, 0.58f, 93.0f, 1.0f);			// Cornflour Blue Background
@@ -57,21 +59,7 @@ Scene::Scene(Input *in)
 
 	//load textures
 	{
-		skyboxTexture = SOIL_load_OGL_texture
-		(
-			"gfx/skybox.png",
-			SOIL_LOAD_AUTO,
-			SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-		);
-
-		reflectedSkyboxTexture = SOIL_load_OGL_texture
-		(
-			"gfx/skyboxEasterEgg.png",
-			SOIL_LOAD_AUTO,
-			SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-		);
+		
 
 		dogeTexture = SOIL_load_OGL_texture
 		(
@@ -414,8 +402,8 @@ void Scene::render() {
 	// Clear Color and Depth Buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	skyBox();
-
+	//skyBox();
+	worldBox->skyBoxRun(1, 1, 1, toggle, cameraLord, cameraIndex, rotation);
 
 	// LIGHTBALL CODE --------------------------------------
 	// only thing keeping this from being done in update() is that the shadow code uses "Light_Position[]"

@@ -24,6 +24,7 @@
 #include "CameraLord.h"
 #include "Toggle.h"
 #include "SpecialKeyInput.h"
+#include "Skybox.h"
 
 class Scene {
 
@@ -79,6 +80,7 @@ protected:
 	GLuint reflectedSkyboxTexture;
 	GLuint dogeTexture;
 	GLuint idolFaceTexture;
+	worldSkyBox* worldBox;
 
 	float boxTexSize; //Width or height of the skybox texture (they are the same). 1 divided by this number for the x and y coordinates gives the top left corner of the pixel second from the top and second pixel from the left.This can be multiplied to give the top left corner of any pixel
 	float boxSideTexSize; //Width or height of the texture of the texture segment used for 1 face (they are the same).
