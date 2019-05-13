@@ -100,37 +100,6 @@ Scene::Scene(Input *in)
 		//props and articulated planes
 		prop.newLightBall(GL_LIGHT0, *cameraLord.getCamera(1));
 		vector<float> holeyCoords;
-		//for (int holeY = 0; holeY < 5; holeY++)
-		//{
-		//	for (int holeX = 0; holeX < 17; holeX++)
-		//	{
-		//		holeyCoords.push_back(holeX * 5 + 0.f + holeX);
-		//		holeyCoords.push_back(holeY * 5 + 5.f + holeY);
-		//		holeyCoords.push_back(holeX * 5 + 5.f + holeX);
-		//		holeyCoords.push_back(holeY * 5 + 10.f + holeY);
-		//	}
-		//}
-
-
-		//holeyCoords.push_back(20.f);
-		//holeyCoords.push_back(100.f);
-		//holeyCoords.push_back(40.f);
-		//holeyCoords.push_back(110.f);
-
-		//prop.newPlane(holeyCoords, 5, 10, 50, 660.f/1024.f, 330.f/1024.f, 100.f / 1024.f, 1.f - 330.f / 1024.f); //element 0
-		//prop.newPlane(1, 20, 20); // element 1
-		//prop.newPlane(1, 20, 20); // element 2
-		//prop.newPlane(5, 100, 100); // element 3
-		//prop.getPlane(0)->setTexture(dogeTexture);
-		//prop.getPlane(2)->setTexture(dogeTexture);
-		//prop.getPlane(3)->setTexture(dogeTexture);
-		//prop.newPlane(1, 1, 1); //element 0
-		//prop.newPlane(1, 20, 20); // element 1
-		//prop.newPlane(1, 20, 20); // element 2
-		//prop.newPlane(1, 1, 1); // element 3
-		//prop.getPlane(0)->setTexture(dogeTexture);
-		//prop.getPlane(2)->setTexture(dogeTexture);
-		//prop.getPlane(3)->setTexture(dogeTexture);
 	}
 
 	glutSetCursor(GLUT_CURSOR_NONE);
