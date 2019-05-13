@@ -23,7 +23,7 @@
 #include "Prop.h"
 #include "CameraLord.h"
 #include "Toggle.h"
-#include "Skybox.h"
+#include "SpecialKeyInput.h"
 
 class Scene {
 
@@ -38,12 +38,7 @@ public:
 	// Resizes the OpenGL output based on new window size.
 	void resize(int w, int h);
 
-	bool RunInput = true, RunUpdate = true, RunRender = true;
-
-
 protected:
-	worldSkyBox* worldSkybox;
-
 	void skyBox(int x, int y, int z);
 	// Renders text (x, y positions, RGB colour of text, string of text to be rendered)
 	void displayText(float x, float y, float r, float g, float b, char* string);

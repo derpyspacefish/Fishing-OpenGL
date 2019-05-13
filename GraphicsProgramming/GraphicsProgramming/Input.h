@@ -1,6 +1,7 @@
 // Input class
 // Stores current keyboard and mouse state include, pressed keys, mouse button pressed and mouse position.
 // @author Paul Robertson
+#include "SpecialKeyInput.h"
 #ifndef INPUT_H
 #define INPUT_H
 
@@ -28,6 +29,7 @@ public:
 	int getMouseY();
 	void setLeftMouseButton(bool b);
 	bool isLeftMouseButtonPressed();
+	SpecialKeyInput *sInput;
 private:
 	// Boolean array, element per key
 	// Mouse struct object.
