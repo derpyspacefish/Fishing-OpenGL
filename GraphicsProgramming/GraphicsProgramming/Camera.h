@@ -9,6 +9,12 @@ public:
 	float Pitch;
 	float Yaw;
 	float Roll;
+	float MaxPitch;
+	float MaxYaw;
+	float MaxRoll;
+	float MinPitch;
+	float MinYaw;
+	float MinRoll;
 	//standard boolean variables that are set when certain keys are pushed. See CameraLord.
 	bool cameraGoingForward;
 	bool cameraGoingBack;
@@ -31,6 +37,9 @@ public:
 	float getUpX();
 	float getUpY();
 	float getUpZ();
+	float Camera::getYaw();
+	float Camera::getPitch();
+	float Camera::getRoll();
 	Vector3 getForward();
 	/*setter for position vector*/
 	void setPos(float _x, float _y, float _z);

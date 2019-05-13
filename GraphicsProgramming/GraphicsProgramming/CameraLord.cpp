@@ -187,11 +187,16 @@ void CameraLord::update(float dt, float _deltaMouseX, float _deltaMouseY, int _c
 	}
 	if (it->pitchDec)
 	{
-		it->Pitch = it->Pitch - it->cameraSpeed * dt * (1 + abs(_deltaMouseY));
+		if(it->Pitch > it->MinPitch)
+			it->Pitch = it->Pitch - it->cameraSpeed * dt * (1 + abs(_deltaMouseY));
 	}
 	if (it->pitchInc)
 	{
-		it->Pitch = it->Pitch + it->cameraSpeed * dt * (1 + abs(_deltaMouseY));
+		/*if (it->Pitch > it->MaxPitch * 2  || it->Pitch < it->MinPitch * 2)
+			it->setOrientation(0, 0, 0);*/
+
+		if(it->Pitch < it->MaxPitch)
+			it->Pitch = it->Pitch + it->cameraSpeed * dt * (1 + abs(_deltaMouseY));
 	}
 	if (it->rollDec)
 	{

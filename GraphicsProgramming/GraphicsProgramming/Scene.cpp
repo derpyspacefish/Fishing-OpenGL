@@ -59,23 +59,7 @@ Scene::Scene(Input *in)
 
 
 	//load textures
-	{
-		skyboxTexture = SOIL_load_OGL_texture
-		(
-			"gfx/skybox.png",
-			SOIL_LOAD_AUTO,
-			SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-		);
-
-		reflectedSkyboxTexture = SOIL_load_OGL_texture
-		(
-			"gfx/skyboxEasterEgg.png",
-			SOIL_LOAD_AUTO,
-			SOIL_CREATE_NEW_ID,
-			SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-		);
-
+	{		
 		dogeTexture = SOIL_load_OGL_texture
 		(
 			"gfx/doge.png",
@@ -95,6 +79,7 @@ Scene::Scene(Input *in)
 		for (int i = 0; i < 3; i++)
 		{
 			cameraLord.getCamera(i)->setPos(0.f, 0.f, 6.f);
+			cameraLord.getCamera(i)->setOrientation(0, 0, 0);
 		}
 		cameraLord.getCamera(1)->setPos(-6.f, 6.f, 0.f);
 		cameraLord.getCamera(1)->Yaw = 75;
@@ -174,8 +159,8 @@ void Scene::handleInput(float dt)
 		if (input->isKeyDown('y'))
 		{
 			//new looking position is down and to the left
-			cameraLord.getCamera(cameraIndex)->setOrientation((-10.f / 2), (-10.f / 2), (0));
-			cameraLord.getCamera(cameraIndex)->setPos(-9.f / 2, -9.f / 2, -30.f);
+			cameraLord.getCamera(cameraIndex)->setOrientation(0,0,0);
+			cameraLord.getCamera(cameraIndex)->setPos(0,4,5);
 			input->SetKeyUp('y');
 		}
 	}
@@ -259,166 +244,7 @@ void Scene::update(float dt)
 }
 /*renders at camera position
 x, y, and z components may be scaled to be consistant with reflection*/
-void Scene::skyBox(int x = 1, int y = 1, int z = 1) //x, y, and z are position scalars
-{
-	glPushMatrix();
-	{
-		toggle->toggleLit();
-		//glDisable(GL_LIGHTING);
-		toggle->toggleDepth();
-		//glDisable(GL_DEPTH_TEST);
-		//
-		glTranslatef(cameraLord.getCamera(cameraIndex)->getPosX() * x, cameraLord.getCamera(cameraIndex)->getPosY() * y, cameraLord.getCamera(cameraIndex)->getPosZ() * z);
-		glRotatef(rotation, 0.f, -1.f, 0.f);
-		//cube 1
-		//						   +--------+
-		//						  /        /|
-		//						 /        / |
-		//						+--------+  |
-		//						|        |  |
-		//						|        |  +
-		//						|        | /
-		//						|        |/
-		//						+--------+
 
-		glColor3f(1, 1, 1);
-		//face front
-		boxIteratorX = 1.f;
-		boxIteratorY = 2.f;
-		glBindTexture(GL_TEXTURE_2D, skyboxTexture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glBegin(GL_QUADS);
-
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		part1;
-		glVertex3f(-1.f, 1.f, 1.f);
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, -1.f, 1.f);
-		part2;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, -1.f, 1.f);
-		part3;
-
-		/*
-		part1, part2, part3, TextureCoordX, and TextureCoordY is just me being "clever" with #define because rendering a cube is a very repetitive process.
-		what each #define means is pasted here for your convenience
-
-		TextureCoordX: (boxIteratorX * boxSideTexSize - boxSideTexSize) / boxTexSize
-		TextureCoordY: (boxIteratorY * boxSideTexSize - boxSideTexSize) / boxTexSize
-		part1: boxIteratorY++
-		part2: boxIteratorX++
-		part3: boxIteratorY--
-		*/
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, 1.f, 1.f);
-
-		//face right - NOTE: top of texture continues to top face and bottom of texture continues to bottom face 
-		//- WITH SAME ORIENTATION -
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, 1.f, 1.f);
-		part1;
-
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, -1.f, 1.f);
-		part2;
-
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, -1.f, -1.f);
-		part3;
-
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, 1.f, -1.f);
-
-		//face back
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, 1.f, -1.f);
-		part1;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, -1.f, -1.f);
-		part2;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, -1.f, -1.f);
-		part3;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, 1.f, -1.f);
-
-		//face left
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, 1.f, -1.f);
-		part1;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, -1.f, -1.f);
-		part2;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, -1.f, 1.f);
-		part3;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, 1.f, 1.f);
-
-		//face top
-		boxIteratorY--;
-		boxIteratorX = boxIteratorX - 3;
-
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, 1.f, 1.f);
-		part1;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, 1.f, 1.f);
-		part2;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, 1.f, -1.f);
-		part3;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, 1.f, -1.f);
-
-		//face bottom
-		boxIteratorY++;
-		boxIteratorY++;
-		boxIteratorX--;
-
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, -1.f, 1.f);
-		part1;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, -1.f, 1.f);
-		part2;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(-1.f, -1.f, -1.f);
-		part3;
-
-		glTexCoord2f(TextureCoordX, TextureCoordY);
-		glVertex3f(1.f, -1.f, -1.f);
-		glEnd();
-		toggle->toggleDepth();
-		//glEnable(GL_DEPTH_TEST);
-		toggle->toggleLit();
-		//glEnable(GL_LIGHTING);
-	}
-	glPopMatrix();
-	return;
-}
 void Scene::render() {
 
 	glutWarpPointer(width / 2, height / 2);
@@ -444,7 +270,6 @@ void Scene::render() {
 	// Clear Color and Depth Buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	skyBox();
 	worldSkybox->skyBoxRun(1,1,1,toggle,cameraLord,cameraIndex,rotation);
 
 
@@ -626,9 +451,29 @@ void Scene::calculateFPS()
 void Scene::renderTextOutput()
 {
 	// Render current mouse position and frames per second.
-	sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
-	displayText(-1.f, 0.96f, 1.f, 0.f, 0.f, mouseText);
-	displayText(-1.f, 0.90f, 1.f, 0.f, 0.f, fps);
+	//sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
+	float yPos = 0.90;
+	sprintf_s(mouseText, "Yaw: %f", cameraLord.getCamera(cameraIndex)->getYaw());//, cameraLord.getCamera(cameraIndex)->getPitch(), cameraLord.getCamera(cameraIndex)->getRoll());
+	displayText(-1.f, yPos, 1.f, 0.f, 0.f, mouseText);
+	yPos -= 0.04f;
+	sprintf_s(mouseText, "Pitch: %f", cameraLord.getCamera(cameraIndex)->getPitch());//, cameraLord.getCamera(cameraIndex)->getPitch(), cameraLord.getCamera(cameraIndex)->getRoll());
+	displayText(-1.f, yPos, 1.f, 0.f, 0.f, mouseText);
+	yPos -= 0.04f;
+	sprintf_s(mouseText, "Roll: %f", cameraLord.getCamera(cameraIndex)->getRoll());//, cameraLord.getCamera(cameraIndex)->getPitch(), cameraLord.getCamera(cameraIndex)->getRoll());
+	displayText(-1.f, yPos, 1.f, 0.f, 0.f, mouseText);
+	yPos -= 0.04f;
+
+	sprintf_s(mouseText, "x: %f", cameraLord.getCamera(cameraIndex)->getPosX());//, cameraLord.getCamera(cameraIndex)->getPitch(), cameraLord.getCamera(cameraIndex)->getRoll());
+	displayText(-1.f, yPos, 1.f, 0.f, 0.f, mouseText);
+	yPos -= 0.04f;
+	sprintf_s(mouseText, "y: %f", cameraLord.getCamera(cameraIndex)->getPosY());//, cameraLord.getCamera(cameraIndex)->getPitch(), cameraLord.getCamera(cameraIndex)->getRoll());
+	displayText(-1.f, yPos, 1.f, 0.f, 0.f, mouseText);
+	yPos -= 0.04f;
+	sprintf_s(mouseText, "z: %f", cameraLord.getCamera(cameraIndex)->getPosZ());//, cameraLord.getCamera(cameraIndex)->getPitch(), cameraLord.getCamera(cameraIndex)->getRoll());
+	displayText(-1.f, yPos, 1.f, 0.f, 0.f, mouseText);
+	yPos -= 0.04f;
+
+	displayText(-1.f, 0.96f, 1.f, 0.f, 0.f, fps);
 
 	//debugging code
 	//sprintf_s(mouseText, "ball position x: %f", cameraLord.getCamera(1)->getPosX());
