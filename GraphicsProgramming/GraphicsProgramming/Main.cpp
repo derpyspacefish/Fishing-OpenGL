@@ -11,10 +11,12 @@
 #include <gl/GLU.h>
 #include "Scene.h"
 #include "Input.h"
+#include "SpecialKeyInput.h"
 
 // Required variables; pointer to scene and input objects. Initialise variable used in delta time calculation.
 Scene* scene;
 Input* input;
+SpecialKeyInput* sInput;
 int oldTimeSinceStart = 0;
 
 // Called when the window detects a change in size.
@@ -37,12 +39,9 @@ void renderScene(void)
 	deltaTime = deltaTime / 100.0f;
 
 	// Update Scene and render next frame.
-	if(scene->RunInput)
-		scene->handleInput(deltaTime);
-	if(scene->RunUpdate)
-		scene->update(deltaTime);
-	if(scene->RunRender)
-		scene->render();
+	scene->handleInput(deltaTime);
+	scene->update(deltaTime);
+	scene->render();
 }
 
 // Handles keyboard input events from GLUT.
@@ -81,6 +80,13 @@ void processNormalKeysUp(unsigned char key, int x, int y)
 void processSpecialKeys(int key, int x, int y)
 {
 	// TODO: Pass special key press to Input class.
+	auto modifier = glutGetModifiers();
+	sInput->setKeyUp(sInput->SHIFT);
+	sInput->setKeyUp(sInput->CTRL);
+	if (modifier == 1)
+	{
+		sInput->setKeyDown(sInput->SHIFT);
+	}
 }
 
 // Handles keyboard input events from GLUT.
@@ -153,7 +159,7 @@ int main(int argc, char **argv)
 	// Register Input callback functions.
 	glutKeyboardFunc(processNormalKeys);
 	glutKeyboardUpFunc(processNormalKeysUp);
-	glutSpecialFunc(NULL);
+	glutSpecialFunc(processSpecialKeys);
 	
 	// Mouse callbacks
 	glutMotionFunc(processActiveMouseMove);
@@ -167,6 +173,8 @@ int main(int argc, char **argv)
 
 	// Initialise input and scene objects.
 	input = new Input();
+	sInput = new SpecialKeyInput();
+	input->sInput = sInput;
 	scene = new Scene(input);
 	
 	// Enter GLUT event processing cycle
